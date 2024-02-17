@@ -1,73 +1,69 @@
 import cv2
 import mediapipe as mp
 import pygame
-import sys
 
-# Initialize Pygame
-pygame.init()
-
-# Set up Pygame window
-width, height = 1280, 720
-window = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Hand Tracking with Pygame")
-
-# Set up Mediapipe Hand module
+# Initialize MediaPipe Hands
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
 
-# Pygame colors
-black = (0, 0, 0)
-white = (255, 255, 255)
+# Initialize Pygame
+pygame.init()
+screen_width, screen_height = 640, 480
+screen = pygame.display.set_mode((screen_width, screen_height))
+clock = pygame.time.Clock()
 
-y_offset = 0
+# Define colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
 
-# Main loop
-running = True
+# Game variables
+finger_radius = 20
+finger_pos = (screen_width // 2, screen_height // 2)  # Initial finger position
+
+# Capture Video from Webcam
 cap = cv2.VideoCapture(0)
-while running:
+
+while True:
+    # Check for Pygame events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_q:
-                running = False
+            cap.release()
+            pygame.quit()
 
-    # Capture video frame
+    # Capture frame from Webcam
     ret, frame = cap.read()
+    if not ret:
+        continue
 
-    # Rotate and flip the frame
-    frame = cv2.transpose(frame)
+    # Flip the frame vertically for selfie view, and convert the BGR image to RGB.
+    frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
 
-    # Convert BGR to RGB
-    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    # Process the frame with MediaPipe Hands.
+    results = hands.process(frame)
 
-    # Process the frame with Mediapipe
-    results = hands.process(rgb_frame)
-
+    # If a hand is detected
     if results.multi_hand_landmarks:
-        for landmarks in results.multi_hand_landmarks:
-            for landmark in landmarks.landmark:
-                # Extract hand coordinates
-                x, y = int(landmark.x * width), int((landmark.y * height) + y_offset)
+        for hand_landmarks in results.multi_hand_landmarks:
+            # Get the coordinates of the index finger tip
+            x = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * frame.shape[1])
+            y = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * frame.shape[0])
 
-                # Draw a circle at each hand landmark
-                cv2.circle(frame, (x, y), 10, (0, 255, 0), -1)
+            # Update finger position
+            finger_pos = (x, y)
 
-    # Convert the frame to RGB for Pygame display
-    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    pygame_frame = pygame.surfarray.make_surface(frame_rgb)
+    # Fill the screen with white color
+    screen.fill(WHITE)
 
-    # Draw the frame on the Pygame window
-    window.blit(pygame_frame, (0, 0))
+    # Draw finger circle on Pygame screen
+    pygame.draw.circle(screen, RED, finger_pos, finger_radius)
+
+    # Update Pygame display
     pygame.display.flip()
 
-    # Check for the 'ESC' key or 'Q' key to exit the loop
-    key = cv2.waitKey(1)
-    if key == 27 or key == ord('q'):
-        running = False
+    # Cap the frame rate
+    clock.tick(30)
 
-# Release resources
+# Release the webcam and quit Pygame
 cap.release()
-cv2.destroyAllWindows()
 pygame.quit()
-sys.exit()
