@@ -63,7 +63,7 @@ while True:
             cap.release()
             pygame.quit()
 
-    finger_pos = detect_hand_pos()
+    finger_pos = detect_hand_pos() # this function returns the
     if finger_pos is None:
         continue
     # Fill the screen with white color
@@ -71,9 +71,10 @@ while True:
 
     # Draw finger circle on Pygame screen
     pygame.draw.circle(screen, RED, finger_pos, finger_radius)
-    pygame.draw.circle(screen, BLACK, (220, 220), finger_radius)
+    x = pygame.draw.circle(screen, BLACK, (220, 220), finger_radius)
+    x.center = (111,111)
 
-# Update Pygame display
+    # Update Pygame display
     pygame.display.flip()
 
     # Cap the frame rate
