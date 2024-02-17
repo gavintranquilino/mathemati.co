@@ -8,7 +8,7 @@ hands = mp_hands.Hands()
 
 # Initialize Pygame
 pygame.init()
-screen_width, screen_height = 640, 480
+screen_width, screen_height = 1280, 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
