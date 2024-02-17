@@ -24,6 +24,38 @@ finger_pos = (screen_width // 2, screen_height // 2)  # Initial finger position
 # Capture Video from Webcam
 cap = cv2.VideoCapture(0)
 
+
+def detect_hand_pos() -> tuple[int] | None:
+    '''
+    this function returns the coordinates of the hand position
+    '''
+    # Capture frame from Webcam
+    ret, frame = cap.read()
+    if ret:
+
+        # Flip the frame vertically for selfie view, and convert the BGR image to RGB.
+        frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
+
+        # Process the frame with MediaPipe Hands.
+        results = hands.process(frame)
+
+        # If a hand is detected
+        if results.multi_hand_landmarks:
+            for hand_landmarks in results.multi_hand_landmarks:
+                # Get the coordinates of the index finger tip
+                x = int(hand_landmarks.landmark[
+                            mp_hands.HandLandmark.INDEX_FINGER_TIP].x *
+                        frame.shape[
+                            1])
+                y = int(hand_landmarks.landmark[
+                            mp_hands.HandLandmark.INDEX_FINGER_TIP].y *
+                        frame.shape[
+                            0])
+
+                # Update finger position
+                return (x, y)
+
+
 while True:
     # Check for Pygame events
     for event in pygame.event.get():
@@ -31,34 +63,17 @@ while True:
             cap.release()
             pygame.quit()
 
-    # Capture frame from Webcam
-    ret, frame = cap.read()
-    if not ret:
+    finger_pos = detect_hand_pos()
+    if finger_pos is None:
         continue
-
-    # Flip the frame vertically for selfie view, and convert the BGR image to RGB.
-    frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
-
-    # Process the frame with MediaPipe Hands.
-    results = hands.process(frame)
-
-    # If a hand is detected
-    if results.multi_hand_landmarks:
-        for hand_landmarks in results.multi_hand_landmarks:
-            # Get the coordinates of the index finger tip
-            x = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * frame.shape[1])
-            y = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * frame.shape[0])
-
-            # Update finger position
-            finger_pos = (x, y)
-
     # Fill the screen with white color
     screen.fill(WHITE)
 
     # Draw finger circle on Pygame screen
     pygame.draw.circle(screen, RED, finger_pos, finger_radius)
+    pygame.draw.circle(screen, BLACK, (220, 220), finger_radius)
 
-    # Update Pygame display
+# Update Pygame display
     pygame.display.flip()
 
     # Cap the frame rate
