@@ -28,8 +28,15 @@ BLUE = (0, 0, 255)
 # Game variables
 finger_radius = 20
 finger_pos = [camera_width // 2, camera_height // 2]  # Initial finger position
+
+# creation of the blue dot position and speed
 blue_dot_pos = [random.randint(0, camera_width - finger_radius), random.randint(0, camera_height - finger_radius)]  # Initial blue dot position
 blue_dot_speed = 5  # Speed of the blue dot
+
+# Variable to determine object attachment
+
+# this will need to count how many objects there are 
+attached = False
 
 while True:
     for event in pygame.event.get():
@@ -47,6 +54,8 @@ while True:
 
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
+
+            # i think this is where it tracks the hand
             x = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * camera_width)
             y = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * camera_height)
 
@@ -56,15 +65,16 @@ while True:
 
             # Check if the red dot (finger) is touching the blue dot
             distance = pygame.math.Vector2(finger_pos[0] - blue_dot_pos[0], finger_pos[1] - blue_dot_pos[1]).length()
-            if distance < finger_radius:
+            if distance < finger_radius or (attached == True):
                 # Update blue dot position based on the finger movement
                 blue_dot_pos = finger_pos
+                attached = True
 
     # Draw on Pygame screen
     screen.fill(WHITE)
     pygame.draw.circle(screen, RED, finger_pos, finger_radius)
 
-    # NEW
+    # BLUE DOT
     pygame.draw.circle(screen, BLUE, blue_dot_pos, finger_radius)
 
     pygame.display.flip()
