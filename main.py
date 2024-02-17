@@ -25,7 +25,7 @@ finger_pos = (screen_width // 2, screen_height // 2)  # Initial finger position
 cap = cv2.VideoCapture(0)
 
 
-def detect_hand_pos() -> tuple[int] | None:
+def detect_hand_pos(): # tuple[int] | None
     '''
     this function returns the coordinates of the hand position
     '''
