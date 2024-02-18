@@ -7,17 +7,16 @@ import random
 
 # ------------------------Game STUFF-----------------#
 score = 0
-turn = 1
 left = None
 right = None
+correct = False
 
 # need to initialize a random one first
 sign_integer = random.randint(0, 1)
 if sign_integer == 0:
     sign = "+"
-else:   
+else:
     sign = "-"
-
 
 zero = Number(15, 30, 999, 0)
 one = Number(78.8, 30, 999, 1)
@@ -31,27 +30,10 @@ eight = Number(525.4, 30, 999, 8)
 nine = Number(590, 30, 999, 9)
 
 # PUTTING THE NUMBERS IN A LIST
-
 numbers = [zero, one, two, three, four, five, six, seven, eight, nine]
-# numbers = [zero, one]
-# numbers = [zero]
-
-# DEFINING THE OPERATIONS (X COORD, Y COORD, DISTANCE, VALUE OF THE OPERATION)
-
-
-addition = Operations(226, 325, 999, "+")
-subtraction = Operations(439, 325, 999, "-")
-
-# LIST OF THE OPERATIONS
-# 0 CORRESPONDS TO ADDITION
-# 1 CORRESPONDS TO SUBTRACTION
-
-operations = [addition, subtraction]
 
 # SAVING THE COORDIANTES SO THEY CAN BE REFERENCED FOR LATER IN A SEPARATE LIST
 # NUMBER OF INDEX = NUMBER REFERRING TO
-
-
 original_x_values = [15, 78.8, 142.6, 206.4, 270.2, 334.0, 397.0, 461.6, 525.4,
                      590]
 original_y_value = 30
@@ -69,13 +51,12 @@ blue_circle = Circle(200, 200, 999)
 # SETTING THE EQUALS SIGN
 red_sign = Equals(400, 200, 999)
 
-
-
 operation = Operations(220, 200, 999, sign)
 
 # Setting the answer
 answer_integer = random.randint(1, 17)
 answer = Answer(530, 205, 999, answer_integer)
+
 
 def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
                                                               int, int] | None:
@@ -99,7 +80,41 @@ def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
         return (x, y)
 
 
-def main():
+def restart(correct: bool):
+    global score, left, right, operation
+
+    if correct:
+        for i in range(len(numbers)):
+            num = numbers[i]
+            num.x, num.y = original_x_values[i], original_y_value
+
+        score += 1
+        left = right = None
+
+        sign_int = random.randint(0, 1)
+        if sign_int == 0:
+            sin = "+"
+        else:
+            sin = "-"
+        operation.value = sin
+    else:
+        for i in range(len(numbers)):
+            num = numbers[i]
+            num.x, num.y = original_x_values[i], original_y_value
+
+        score = max(0, score - 1)
+        left = right = None
+
+        sign_int = random.randint(0, 1)
+        if sign_int == 0:
+            sin = "+"
+        else:
+            sin = "-"
+        operation.value = sin
+
+
+def main() -> None:
+    global left, right, operation, score
     # Initialize MediaPipe Hands
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands()
@@ -115,7 +130,6 @@ def main():
     # background_image = pygame.image.load('math background.jpg')
     # background = pygame.transform.scale(background_image,
     #                                     (screen_width, screen_height))
-
 
     GRAB_DISTANCE = 20
 
@@ -143,8 +157,8 @@ def main():
         display_answer(answer, screen)
         display_operation(operation, screen)
         display_garbage(garbage, screen)
-
         display_numbers(numbers, screen)
+        print(score)  # show it on screen later
 
         ret, frame = cap.read()
         if ret:
@@ -155,15 +169,6 @@ def main():
             results = hands.process(frame)
             finger_pos = get_hand_pos(results, mp_hands, frame,
                                       mp.solutions.drawing_utils)
-            
-
-            # SETTING THE SIGN (ADDING OR SUBTRACTING) RANDOM STUFF-----------------#
-            sign_integer = random.randint(0, 1)
-            if sign_integer == 0:
-                sign = "+"
-            else:   
-                sign = "-"
-
 
             if finger_pos:
                 pygame.draw.circle(screen, RED, finger_pos, finger_radius)
@@ -176,20 +181,27 @@ def main():
 
                     # ------------------------DROPPING-----------------#
                     # if finger_pos[0] and finger_pos[1] are within the green box, print "in green box"
-                    if (green_box_one.x < finger_pos[0] < green_box_one.x + 100 and green_box_one.y < finger_pos[1] < green_box_one.y + 100):
+                    if (green_box_one.x < finger_pos[
+                        0] < green_box_one.x + 100 and green_box_one.y <
+                            finger_pos[1] < green_box_one.y + 100):
                         print("in green box one")
-                        # set the coordinates of the grabbed object to the coordinates of the green box and set is_grab to False   
+                        # set the coordinates of the grabbed object to the coordinates of the green box and set is_grab to False
                         grabbed_object.x, grabbed_object.y = green_box_one.x, green_box_one.y
                         left = grabbed_object.value
                         is_grab = False
-                    elif (green_box_two.x < finger_pos[0] < green_box_two.x + 100 and green_box_two.y < finger_pos[1] < green_box_two.y + 100):
+                    elif (green_box_two.x < finger_pos[
+                        0] < green_box_two.x + 100 and green_box_two.y <
+                          finger_pos[1] < green_box_two.y + 100):
                         print("in green box two")
-                        # set the coordinates of the grabbed object to the coordinates of the green box and set is_grab to False  
+                        # set the coordinates of the grabbed object to the coordinates of the green box and set is_grab to False
                         grabbed_object.x, grabbed_object.y = green_box_two.x, green_box_two.y
                         right = grabbed_object.value
-                        is_grab = False 
-                    elif (garbage.x < finger_pos[0] < garbage.x + 125 and garbage.y < finger_pos[1] < garbage.y + 125):
-                        grabbed_object.x, grabbed_object.y = original_x_values[grabbed_object.value], original_y_value
+                        is_grab = False
+                    elif (garbage.x < finger_pos[
+                        0] < garbage.x + 125 and garbage.y < finger_pos[
+                              1] < garbage.y + 125):
+                        grabbed_object.x, grabbed_object.y = original_x_values[
+                            grabbed_object.value], original_y_value
                         is_grab = False
 
                 else:
@@ -200,6 +212,15 @@ def main():
                         if is_grab:
                             grabbed_object = obj
                             break
+        if left is not None and right is not None:
+            if operation.value == '+':
+                lhs = left + right
+                rhs = answer.value
+                restart(lhs == rhs)
+            else:
+                lhs = left - right
+                rhs = answer.value
+                restart(lhs == rhs)
 
         # Draw the opencv image onto pygame window
         # resize opencv to be 1/8 of the pygame window size, and display on the bottom right
@@ -225,6 +246,12 @@ def main():
     cap.release()
     pygame.quit()
 
+    '''
+    if over:
+        return
+    '''
+
 
 if __name__ == "__main__":
+
     main()
