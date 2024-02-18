@@ -1,9 +1,9 @@
 import cv2
 import mediapipe as mp
 import pygame
-import asyncio
+# import asyncio
 from Objects import *
-from Frontend import * 
+from Frontend import *
 import random
 
 zero = Number(15, 30, 999, 0)
@@ -33,27 +33,18 @@ subtraction = Operations(439, 325, 999, "-")
 
 operations = [addition, subtraction]
 
-
 # SAVING THE COORDIANTES SO THEY CAN BE REFERENCED FOR LATER IN A SEPARATE LIST
 # NUMBER OF INDEX = NUMBER REFERRING TO
 
 
-original_x_values = [15, 78.8, 142.6, 206.4, 270.2, 334.0, 397.0, 461.6, 525.4, 590]
+original_x_values = [15, 78.8, 142.6, 206.4, 270.2, 334.0, 397.0, 461.6, 525.4,
+                     590]
 original_y_value = 30
-
-# ORIGINAL SIGN VALUES
-
-# 0 CORRESPODING TO ADDITION FOR BOTH LISTS
-# 1 CORRESPONDS TO SUBTRACTION FOR BOTH LISTS
-
-original_sign_x_values = [176, 389]
-original_sign_y_value = 30
 
 # SETTING THE GARBAGE CAN
 garbage = GarbageCan(999)
 
 # SETTING THE GREEN BOXES (WHERE THE NUMBERS WILL GO)
-
 green_box_one = Squares(100, 200, 999)
 green_box_two = Squares(300, 200, 999)
 
@@ -67,7 +58,8 @@ red_sign = Equals(400, 200, 999)
 answer_integer = random.randint(1, 17)
 answer = Answer(530, 205, 999, answer_integer)
 
-async def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
+
+def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
                                                               int, int] | None:
     """
     Returns the coordinates of the hand position
@@ -77,7 +69,7 @@ async def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
         for hand_landmarks in results.multi_hand_landmarks:
             for lm in hand_landmarks.landmark:
                 mp_drawing.draw_landmarks(frame, hand_landmarks,
-                                                      mp_hands.HAND_CONNECTIONS)
+                                          mp_hands.HAND_CONNECTIONS)
             x = int(hand_landmarks.landmark[
                         mp_hands.HandLandmark.INDEX_FINGER_TIP].x *
                     frame.shape[
@@ -89,14 +81,14 @@ async def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
         return (x, y)
 
 
-async def main():
+def main():
     # Initialize MediaPipe Hands
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands()
 
     # Initialize Pygame
     pygame.init()
-    screen_width, screen_height = 640, 480 
+    screen_width, screen_height = 640, 480
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
 
@@ -110,8 +102,6 @@ async def main():
 
     # Game variables
     finger_radius = 20
-    '''finger_pos = (
-    screen_width // 2, screen_height // 2)  # Initial finger position'''
 
     # Capture Video from Webcam
     cap = cv2.VideoCapture(0)
@@ -142,18 +132,17 @@ async def main():
 
             # Process the frame with MediaPipe Hands.
             results = hands.process(frame)
-            finger_pos = await get_hand_pos(results, mp_hands, frame,
+            finger_pos = get_hand_pos(results, mp_hands, frame,
                                       mp.solutions.drawing_utils)
             if finger_pos:
                 pygame.draw.circle(screen, RED, finger_pos, finger_radius)
                 # print(finger_pos)
 
-
                 # GRAB LOGIC
                 if is_grab:
                     grabbed_object.x, grabbed_object.y = finger_pos[0], \
                         finger_pos[1]
-                    
+
                     # Frontend
 
                 else:
@@ -164,24 +153,22 @@ async def main():
                         if is_grab:
                             grabbed_object = obj
                             break
-                
-        # Draw the opencv image onto pygame window 
+
+        # Draw the opencv image onto pygame window
         # resize opencv to be 1/8 of the pygame window size, and display on the bottom right
         frame = cv2.resize(frame, (screen_width // 4, screen_height // 4))
         frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
         frame = cv2.flip(frame, 1)
 
-        screen.blit(pygame.surfarray.make_surface(frame), (screen_width * 0.75, screen_height * 0.75))
-        
+        screen.blit(pygame.surfarray.make_surface(frame),
+                    (screen_width * 0.75, screen_height * 0.75))
+
         # ------------------------Adam's drawings replace this-----------------#
         # for obj in numbers:
         #     pygame.draw.circle(screen, (0, 0, 255), (obj.x, obj.y), 30)
         # ----------------------------------------------------------------------#
 
         pygame.display.flip()
-
-        # Let other tasks run
-        await asyncio.sleep(0)
 
         # cv2.imshow('MediaPipe Hands', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
         # cv2.waitKey(1)
@@ -191,5 +178,6 @@ async def main():
     cap.release()
     pygame.quit()
 
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
