@@ -10,7 +10,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Movable Number")
 
 # Set up the font
-patrick = pygame.font.Font(None, 100)  # You can choose a font and size - the number changes the size of the number
+Font = pygame.font.Font(None, 100)  # You can choose a font and size - the number changes the size of the number
 
 
 # ABOVE LINE CREATES THE FONT
@@ -18,42 +18,36 @@ patrick = pygame.font.Font(None, 100)  # You can choose a font and size - the nu
 
 # Function to display a number as an object
 def display_number(number, x, y):
-    text = patrick.render(str(number), True, (0, 0, 0))  # Render the text
+    text = Font.render(str(number), True, (0, 0, 0))  # Render the text
     screen.blit(text, (x, y))  # Draw the text on the screen
-    
+
 def distances(mouse_x, mouse_y, x_positions, y_positions):
     # return the smallest distance and edit those values
-    
+
     # dist list is a list with all of the different distances from each number
-    dist = [999, 999, 999, 999, 999, 999, 999, 999, 999, 999]
-    
+    dist = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
     for i in range(len(x_positions)):
-        
+
         # calculate the distance for one of the individual values
-        
+
         dist[i] = (pygame.math.Vector2(mouse_x - x_positions[i], mouse_y - y_positions[i]).length())
-        
+
         # print(i, dist[i])
-        
-        for j in range(len(dist) - 1):
-            current_lowest = dist[j]
-            current_lowest_index = j
-        
-        if (current_lowest < dist[j+1]):
-            current_lowest = dist[j+1]
-            current_lowest_index = j+1
-            
-        print(dist)
-        print("current lowerst ", current_lowest)
-        print("current lowest index ", current_lowest_index)
-        
+
     # find the lowest distance of the distances
-    
-    return current_lowest_index
-    
+
+    for i in range(len(dist) - 1):
+        if dist[i] < dist[i+1]:
+            lowest_index = i
+        else:
+            lowest_index = i+1
+
+    return lowest_index
+
 
 # Initial position of the number
-    
+
 # number_x, number_y = 50, 50
 number_x = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
 number_y = [50, 50, 50, 50, 50, 50, 50, 50, 50, 50]
@@ -72,18 +66,17 @@ while True:
 
     # Get the position of the mouse cursor
     mouse_x, mouse_y = pygame.mouse.get_pos()
-    print(mouse_x, mouse_y)
-    
+
     # get the shortest distance away
     change = distances(mouse_x, mouse_y, number_x, number_y)
 
     # Check if the mouse cursor is within the bounding box of the number
-    
+
     # needs to change to be the number you want - the one with the lowest distance
-    
+
     # need to somehow code the distance to the lowest distance
-    
-    
+
+
     if number_x[change] < mouse_x < number_x[change] + 36 and number_y[change] < mouse_y < number_y[change] + 36:
         # Check for mouse click events
         if pygame.mouse.get_pressed()[0]:  # Left mouse button
