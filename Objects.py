@@ -12,6 +12,15 @@ class Object:
     def __init__(self, x: float, y: float, distance: float):
         self.x, self.y, self.distance = x, y, distance
 
+    def grab(self, cur_x, cur_y, set_dist):
+        '''
+        this method is used to grab the object
+        '''
+
+        distance2Cursor = ((cur_x - self.x) ** 2 + (cur_y - self.y) ** 2) ** 0.5
+
+        return distance2Cursor < set_dist
+
 
 class Number(Object):
     '''
