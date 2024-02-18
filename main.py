@@ -2,7 +2,70 @@ import cv2
 import mediapipe as mp
 import pygame
 import asyncio
-from Objects import Number, Operations, GarbageCan
+from Objects import *
+from Frontend import * 
+import random
+
+zero = Number(15, 30, 999, 0)
+one = Number(78.8, 30, 999, 1)
+two = Number(142.6, 30, 999, 2)
+three = Number(206.4, 30, 999, 3)
+four = Number(270.2, 30, 999, 4)
+five = Number(334.0, 30, 999, 5)
+six = Number(397.0, 30, 999, 6)
+seven = Number(461.6, 30, 999, 7)
+eight = Number(525.4, 30, 999, 8)
+nine = Number(590, 30, 999, 9)
+
+# PUTTING THE NUMBERS IN A LIST
+
+numbers = [zero, one, two, three, four, five, six, seven, eight, nine]
+
+# DEFINING THE OPERATIONS (X COORD, Y COORD, DISTANCE, VALUE OF THE OPERATION)
+
+
+addition = Operations(226, 325, 999, "+")
+subtraction = Operations(439, 325, 999, "-")
+
+# LIST OF THE OPERATIONS
+# 0 CORRESPONDS TO ADDITION
+# 1 CORRESPONDS TO SUBTRACTION
+
+operations = [addition, subtraction]
+
+
+# SAVING THE COORDIANTES SO THEY CAN BE REFERENCED FOR LATER IN A SEPARATE LIST
+# NUMBER OF INDEX = NUMBER REFERRING TO
+
+
+original_x_values = [15, 78.8, 142.6, 206.4, 270.2, 334.0, 397.0, 461.6, 525.4, 590]
+original_y_value = 30
+
+# ORIGINAL SIGN VALUES
+
+# 0 CORRESPODING TO ADDITION FOR BOTH LISTS
+# 1 CORRESPONDS TO SUBTRACTION FOR BOTH LISTS
+
+original_sign_x_values = [176, 389]
+original_sign_y_value = 30
+
+# SETTING THE GARBAGE CAN
+garbage = GarbageCan(999)
+
+# SETTING THE GREEN BOXES (WHERE THE NUMBERS WILL GO)
+
+green_box_one = Squares(100, 200, 999)
+green_box_two = Squares(300, 200, 999)
+
+# SETTING THE BLUE CIRCLE (WHERE THE OPERATIONS WILL GO)
+blue_circle = Circle(200, 200, 999)
+
+# SETTING THE EQUALS SIGN
+red_sign = Equals(400, 200, 999)
+
+# Setting the answer
+answer_integer = random.randint(1, 17)
+answer = Answer(530, 205, 999, answer_integer)
 
 async def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
                                                               int, int] | None:
@@ -53,14 +116,6 @@ async def main():
     # Capture Video from Webcam
     cap = cv2.VideoCapture(0)
 
-    # ---------------------will be replaced by adam's code------------------#
-    test_object = Number(300, 300, 30, 1)
-    test_object2 = Number(100, 100, 30, 1)
-    test_object3 = Number(346, 337, 30, 1)
-
-    object_list = [test_object, test_object2, test_object3]
-    # ----------------------------------------------------------------------#
-
     is_grab = False  # did we grab anything? no...initially
     grabbed_object = None  # what did we grab??
 
@@ -71,7 +126,14 @@ async def main():
                 cap.release()
                 pygame.quit()
 
-        screen.blit(background, (0, 0))
+        # screen.blit(background, (0, 0))
+        screen.fill((255, 255, 255))
+        display_green_box(green_box_one, screen)
+        display_green_box(green_box_two, screen)
+        display_equals(red_sign, screen)
+        display_answer(answer, screen)
+
+        display_numbers(numbers, screen)
 
         ret, frame = cap.read()
         if ret:
@@ -86,20 +148,23 @@ async def main():
                 pygame.draw.circle(screen, RED, finger_pos, finger_radius)
                 # print(finger_pos)
 
+
                 # GRAB LOGIC
                 if is_grab:
                     grabbed_object.x, grabbed_object.y = finger_pos[0], \
                         finger_pos[1]
+                    
+                    # Frontend
 
                 else:
-                    for obj in object_list:
+                    for obj in numbers:
                         is_grab = obj.grab(finger_pos[0], finger_pos[1],
                                            GRAB_DISTANCE)
                         print(is_grab)
                         if is_grab:
                             grabbed_object = obj
                             break
-
+                
         # Draw the opencv image onto pygame window 
         # resize opencv to be 1/8 of the pygame window size, and display on the bottom right
         frame = cv2.resize(frame, (screen_width // 4, screen_height // 4))
@@ -109,10 +174,9 @@ async def main():
         screen.blit(pygame.surfarray.make_surface(frame), (screen_width * 0.75, screen_height * 0.75))
         
         # ------------------------Adam's drawings replace this-----------------#
-        for obj in object_list:
-            pygame.draw.circle(screen, (0, 0, 255), (obj.x, obj.y), 30)
+        # for obj in numbers:
+        #     pygame.draw.circle(screen, (0, 0, 255), (obj.x, obj.y), 30)
         # ----------------------------------------------------------------------#
-
 
         pygame.display.flip()
 
