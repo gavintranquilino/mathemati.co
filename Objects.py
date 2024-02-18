@@ -50,6 +50,19 @@ class Operations(Object):
         Object.__init__(self, x, y, distance)
         self.value = value
 
+class Answer(Object):
+    '''
+    this is an answer object with coordinates, distance and some int value
+    '''
+    x: float
+    y: float
+    distance: float
+    value: int
+
+    def __init__(self, x: float, y: float, distance: float, value: int):
+        Object.__init__(self, x, y, distance)
+        self.value = value
+
 
 class GarbageCan(Object):
     '''
@@ -61,6 +74,50 @@ class GarbageCan(Object):
     distance: float
 
     def __init__(self, distance: float):
-        self.x = 10
-        self.y = 410
+        self.x = 20
+        self.y = 350
         self.distance = distance
+        self.value = "Garbage.png"
+
+class Squares(Object):
+    '''
+    this is a squares Object with two coordinates, both passed in by the user, 
+    and a distance that is passed in as a parameter by the user
+    '''
+
+    x: float
+    y: float
+    distance: float
+
+    def __init__(self, x: float, y: float, distance: float):
+        Object.__init__(self, x, y, distance)
+        self.value = "Green Square.png"
+
+class Circle(Object):
+    '''
+    This is a circles Object wiht two coordinates, both passed in by the user, and a distance
+    that is passed in as a parameter by a user.
+    '''
+
+    x: float
+    y: float
+    distance: float
+
+    def __init__(self, x: float, y: float, distance: float):
+        Object.__init__(self, x, y, distance)
+        self.value = "Circle.png"
+
+
+class Equals(Object):
+    '''
+    This is a equals_sign Object wiht two coordinates, both passed in by the user, and a distance
+    that is passed in as a parameter by a user.
+    '''
+
+    x: float
+    y: float
+    distance: float
+
+    def __init__(self, x: float, y: float, distance: float):
+        Object.__init__(self, x, y, distance)
+        self.value = "Equals Sign.jpg"

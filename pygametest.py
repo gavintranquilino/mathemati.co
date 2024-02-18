@@ -33,7 +33,7 @@ def distances(mouse_x, mouse_y, x_positions, y_positions):
 
         dist[i] = (pygame.math.Vector2(mouse_x - x_positions[i], mouse_y - y_positions[i]).length())
 
-        print(i, dist[i])
+        # print(i, dist[i])
 
     # find the lowest distance of the distances
 

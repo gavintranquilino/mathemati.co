@@ -14,7 +14,7 @@ async def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
         for hand_landmarks in results.multi_hand_landmarks:
             for lm in hand_landmarks.landmark:
                 mp_drawing.draw_landmarks(frame, hand_landmarks,
-                                          mp_hands.HAND_CONNECTIONS)
+                                                      mp_hands.HAND_CONNECTIONS)
             x = int(hand_landmarks.landmark[
                         mp_hands.HandLandmark.INDEX_FINGER_TIP].x *
                     frame.shape[
