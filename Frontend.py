@@ -86,6 +86,13 @@ def display_equals(equals, screen):
 
 # # DISPLAYING THE ANSWER
 
+# display the value on pygame screen given a int value and screen
+def display_value(value, screen):
+    value_display = pygame.font.Font(None, 80).render("Score:" + str(value), True, (0, 0, 0))
+    screen.blit(value_display, (180, 360))
+
+
+
 # answer_display = font.render(str(answer.value), True, (0, 0, 0))
 # screen.blit(answer_display, (answer.x, answer.y))
 # display the answer as a function

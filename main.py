@@ -54,7 +54,7 @@ red_sign = Equals(400, 200, 999)
 operation = Operations(220, 200, 999, sign)
 
 # Setting the answer
-answer_integer = random.randint(1, 17)
+answer_integer = random.randint(1, 9)
 answer = Answer(530, 205, 999, answer_integer)
 
 
@@ -81,8 +81,10 @@ def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
 
 
 def restart(correct: bool):
-    global score, left, right, operation
+    global score, left, right, operation, answer
 
+    answer_int = random.randint(1, 9)
+    answer.value = answer_int
     if correct:
         for i in range(len(numbers)):
             num = numbers[i]
@@ -127,9 +129,9 @@ def main() -> None:
 
     # Define color red and background image
     RED = (255, 0, 0)
-    # background_image = pygame.image.load('math background.jpg')
-    # background = pygame.transform.scale(background_image,
-    #                                     (screen_width, screen_height))
+    background_image = pygame.image.load('math background.jpg')
+    background = pygame.transform.scale(background_image,
+                                        (screen_width, screen_height))
 
     GRAB_DISTANCE = 20
 
@@ -158,7 +160,8 @@ def main() -> None:
         display_operation(operation, screen)
         display_garbage(garbage, screen)
         display_numbers(numbers, screen)
-        print(score)  # show it on screen later
+        # print(score)  # show it on screen later
+        display_value(score, screen)
 
         ret, frame = cap.read()
         if ret:
@@ -172,7 +175,7 @@ def main() -> None:
 
             if finger_pos:
                 pygame.draw.circle(screen, RED, finger_pos, finger_radius)
-                # print(finger_pos)
+                print(finger_pos)
 
                 # GRAB LOGIC
                 if is_grab:
@@ -236,7 +239,9 @@ def main() -> None:
             pygame.draw.circle(screen, (0, 0, 255), (obj.x, obj.y), 1)
         # ----------------------------------------------------------------------#
 
+        # Update the display
         pygame.display.flip()
+        
 
         # cv2.imshow('MediaPipe Hands', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
         # cv2.waitKey(1)
