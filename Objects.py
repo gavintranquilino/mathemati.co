@@ -64,3 +64,5 @@ class GarbageCan(Object):
         self.x = 10
         self.y = 410
         self.distance = distance
+
+print(help(Number))

@@ -3,6 +3,7 @@ import mediapipe as mp
 import pygame
 from Objects import Number, Operations, GarbageCan
 
+
 def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
                                                               int, int] | None:
     """
@@ -24,6 +25,7 @@ def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
                         0])
         return (x, y)
 
+
 def main():
     # Initialize MediaPipe Hands
     mp_hands = mp.solutions.hands
@@ -35,29 +37,32 @@ def main():
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
 
-    # Define colors
-    BLACK = (0, 0, 0)
-    WHITE = (255, 255, 255)
+    # Define color red and background image
     RED = (255, 0, 0)
+    background_image = pygame.image.load('math background.jpg')
+    background = pygame.transform.scale(background_image,
+                                        (screen_width, screen_height))
 
-    GRAB_DISTANCE = 50
+    GRAB_DISTANCE = 20
 
     # Game variables
     finger_radius = 20
-    finger_pos = (
-    screen_width // 2, screen_height // 2)  # Initial finger position
+    '''finger_pos = (
+    screen_width // 2, screen_height // 2)  # Initial finger position'''
 
     # Capture Video from Webcam
     cap = cv2.VideoCapture(0)
 
+    # ---------------------will be replaced by adam's code------------------#
     test_object = Number(300, 300, 30, 1)
     test_object2 = Number(100, 100, 30, 1)
     test_object3 = Number(346, 337, 30, 1)
 
     object_list = [test_object, test_object2, test_object3]
+    # ----------------------------------------------------------------------#
 
-    is_grab = False
-    grabbed_object = None
+    is_grab = False  # did we grab anything? no...initially
+    grabbed_object = None  # what did we grab??
 
     while True:
         # Check for Pygame events
@@ -66,8 +71,7 @@ def main():
                 cap.release()
                 pygame.quit()
 
-        # Fill the screen with white color
-        screen.fill(WHITE)
+        screen.blit(background, (0, 0))
 
         ret, frame = cap.read()
         if ret:
@@ -84,20 +88,22 @@ def main():
 
                 # GRAB LOGIC
                 if is_grab:
-                    grabbed_object.x, grabbed_object.y = finger_pos[0], finger_pos[1]
+                    grabbed_object.x, grabbed_object.y = finger_pos[0], \
+                        finger_pos[1]
 
                 else:
                     for obj in object_list:
-                        if not is_grab:
-                            is_grab = obj.grab(finger_pos[0], finger_pos[1], GRAB_DISTANCE)
-                            print(is_grab)
+                        is_grab = obj.grab(finger_pos[0], finger_pos[1],
+                                           GRAB_DISTANCE)
+                        print(is_grab)
+                        if is_grab:
                             grabbed_object = obj
+                            break
 
-        # Draw Objects
+        # ------------------------Adam's drawings replace this-----------------#
         for obj in object_list:
             pygame.draw.circle(screen, (0, 0, 255), (obj.x, obj.y), 30)
-
-                
+        # ----------------------------------------------------------------------#
 
         # Draw a red circle representing the finger
         pygame.display.flip()
