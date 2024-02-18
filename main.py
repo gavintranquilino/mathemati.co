@@ -2,7 +2,7 @@ import cv2
 import mediapipe as mp
 import pygame
 from Objects import *
-from Frontend import * 
+from Frontend import *
 import random
 
 zero = Number(15, 30, 999, 0)
@@ -33,27 +33,18 @@ subtraction = Operations(439, 325, 999, "-")
 
 operations = [addition, subtraction]
 
-
 # SAVING THE COORDIANTES SO THEY CAN BE REFERENCED FOR LATER IN A SEPARATE LIST
 # NUMBER OF INDEX = NUMBER REFERRING TO
 
 
-original_x_values = [15, 78.8, 142.6, 206.4, 270.2, 334.0, 397.0, 461.6, 525.4, 590]
+original_x_values = [15, 78.8, 142.6, 206.4, 270.2, 334.0, 397.0, 461.6, 525.4,
+                     590]
 original_y_value = 30
-
-# ORIGINAL SIGN VALUES
-
-# 0 CORRESPODING TO ADDITION FOR BOTH LISTS
-# 1 CORRESPONDS TO SUBTRACTION FOR BOTH LISTS
-
-original_sign_x_values = [176, 389]
-original_sign_y_value = 30
 
 # SETTING THE GARBAGE CAN
 garbage = GarbageCan(999)
 
 # SETTING THE GREEN BOXES (WHERE THE NUMBERS WILL GO)
-
 green_box_one = Squares(100, 200, 999)
 green_box_two = Squares(300, 200, 999)
 
@@ -77,7 +68,7 @@ def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
         for hand_landmarks in results.multi_hand_landmarks:
             for lm in hand_landmarks.landmark:
                 mp_drawing.draw_landmarks(frame, hand_landmarks,
-                                                      mp_hands.HAND_CONNECTIONS)
+                                          mp_hands.HAND_CONNECTIONS)
             x = int(hand_landmarks.landmark[
                         mp_hands.HandLandmark.INDEX_FINGER_TIP].x *
                     frame.shape[
@@ -96,7 +87,7 @@ def main():
 
     # Initialize Pygame
     pygame.init()
-    screen_width, screen_height = 640, 480 
+    screen_width, screen_height = 640, 480
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
 
@@ -110,8 +101,6 @@ def main():
 
     # Game variables
     finger_radius = 20
-    '''finger_pos = (
-    screen_width // 2, screen_height // 2)  # Initial finger position'''
 
     # Capture Video from Webcam
     cap = cv2.VideoCapture(0)
@@ -148,7 +137,6 @@ def main():
                 pygame.draw.circle(screen, RED, finger_pos, finger_radius)
                 # print(finger_pos)
 
-
                 # GRAB LOGIC
                 if is_grab:
                     grabbed_object.x, grabbed_object.y = finger_pos[0], \
@@ -174,15 +162,16 @@ def main():
                         if is_grab:
                             grabbed_object = obj
                             break
-                
-        # Draw the opencv image onto pygame window 
+
+        # Draw the opencv image onto pygame window
         # resize opencv to be 1/8 of the pygame window size, and display on the bottom right
         frame = cv2.resize(frame, (screen_width // 4, screen_height // 4))
         frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
         frame = cv2.flip(frame, 1)
 
-        screen.blit(pygame.surfarray.make_surface(frame), (screen_width * 0.75, screen_height * 0.75))
-        
+        screen.blit(pygame.surfarray.make_surface(frame),
+                    (screen_width * 0.75, screen_height * 0.75))
+
         # ------------------------Adam's drawings replace this-----------------#
         # for obj in numbers:
         #     pygame.draw.circle(screen, (0, 0, 255), (obj.x, obj.y), 30)
@@ -197,6 +186,7 @@ def main():
     # Release the webcam and quit Pygame
     cap.release()
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()
