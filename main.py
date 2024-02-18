@@ -6,21 +6,21 @@ from Frontend import *
 import random
 
 zero = Number(15, 30, 999, 0)
-# one = Number(78.8, 30, 999, 1)
-# two = Number(142.6, 30, 999, 2)
-# three = Number(206.4, 30, 999, 3)
-# four = Number(270.2, 30, 999, 4)
-# five = Number(334.0, 30, 999, 5)
-# six = Number(397.0, 30, 999, 6)
-# seven = Number(461.6, 30, 999, 7)
-# eight = Number(525.4, 30, 999, 8)
-# nine = Number(590, 30, 999, 9)
+one = Number(78.8, 30, 999, 1)
+two = Number(142.6, 30, 999, 2)
+three = Number(206.4, 30, 999, 3)
+four = Number(270.2, 30, 999, 4)
+five = Number(334.0, 30, 999, 5)
+six = Number(397.0, 30, 999, 6)
+seven = Number(461.6, 30, 999, 7)
+eight = Number(525.4, 30, 999, 8)
+nine = Number(590, 30, 999, 9)
 
 # PUTTING THE NUMBERS IN A LIST
 
-# numbers = [zero, one, two, three, four, five, six, seven, eight, nine]
+numbers = [zero, one, two, three, four, five, six, seven, eight, nine]
 # numbers = [zero, one]
-numbers = [zero]
+# numbers = [zero]
 
 # DEFINING THE OPERATIONS (X COORD, Y COORD, DISTANCE, VALUE OF THE OPERATION)
 
@@ -96,16 +96,16 @@ def main():
     hands = mp_hands.Hands()
 
     # Initialize Pygame
-    pygame.init()
+    # pygame.init()
     screen_width, screen_height = 640, 480
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
 
     # Define color red and background image
     RED = (255, 0, 0)
-    background_image = pygame.image.load('math background.jpg')
-    background = pygame.transform.scale(background_image,
-                                        (screen_width, screen_height))
+    # background_image = pygame.image.load('math background.jpg')
+    # background = pygame.transform.scale(background_image,
+    #                                     (screen_width, screen_height))
 
 
     GRAB_DISTANCE = 20
@@ -190,8 +190,8 @@ def main():
                     (screen_width * 0.75, screen_height * 0.75))
 
         # ------------------------Adam's drawings replace this-----------------#
-        # for obj in numbers:
-        #     pygame.draw.circle(screen, (0, 0, 255), (obj.x, obj.y), 30)
+        for obj in numbers:
+            pygame.draw.circle(screen, (0, 0, 255), (obj.x, obj.y), 1)
         # ----------------------------------------------------------------------#
 
         pygame.display.flip()
