@@ -3,7 +3,8 @@ import mediapipe as mp
 import pygame
 
 
-def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[int] | None:
+def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
+                                                              int, int] | None:
     """
     Returns the coordinates of the hand position
     """
@@ -12,7 +13,7 @@ def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[int] | None:
         for hand_landmarks in results.multi_hand_landmarks:
             for lm in hand_landmarks.landmark:
                 mp_drawing.draw_landmarks(frame, hand_landmarks,
-                                                      mp_hands.HAND_CONNECTIONS)
+                                          mp_hands.HAND_CONNECTIONS)
             x = int(hand_landmarks.landmark[
                         mp_hands.HandLandmark.INDEX_FINGER_TIP].x *
                     frame.shape[
@@ -22,6 +23,7 @@ def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[int] | None:
                     frame.shape[
                         0])
         return (x, y)
+
 
 def main():
     # Initialize MediaPipe Hands
@@ -41,7 +43,8 @@ def main():
 
     # Game variables
     finger_radius = 20
-    finger_pos = (screen_width // 2, screen_height // 2)  # Initial finger position
+    finger_pos = (
+    screen_width // 2, screen_height // 2)  # Initial finger position
 
     # Capture Video from Webcam
     cap = cv2.VideoCapture(0)
@@ -63,7 +66,8 @@ def main():
 
             # Process the frame with MediaPipe Hands.
             results = hands.process(frame)
-            finger_pos = get_hand_pos(results, mp_hands, frame, mp.solutions.drawing_utils)
+            finger_pos = get_hand_pos(results, mp_hands, frame,
+                                      mp.solutions.drawing_utils)
             if finger_pos:
                 pygame.draw.circle(screen, RED, finger_pos, finger_radius)
                 print(finger_pos)
@@ -77,6 +81,7 @@ def main():
     # Release the webcam and quit Pygame
     cap.release()
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()
