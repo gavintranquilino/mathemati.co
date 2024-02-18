@@ -1,3 +1,5 @@
+ # <p align="center"> Mathemati.co 👋
+
 ## Inspiration
 Accessible learning?  Child-oriented?  Making math…fun?
 
