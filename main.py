@@ -1,10 +1,10 @@
 import cv2
 import mediapipe as mp
 import pygame
+import asyncio
 from Objects import Number, Operations, GarbageCan
 
-
-def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
+async def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
                                                               int, int] | None:
     """
     Returns the coordinates of the hand position
@@ -26,14 +26,14 @@ def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
         return (x, y)
 
 
-def main():
+async def main():
     # Initialize MediaPipe Hands
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands()
 
     # Initialize Pygame
     pygame.init()
-    screen_width, screen_height = 640, 480
+    screen_width, screen_height = 640, 480 
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
 
@@ -80,7 +80,7 @@ def main():
 
             # Process the frame with MediaPipe Hands.
             results = hands.process(frame)
-            finger_pos = get_hand_pos(results, mp_hands, frame,
+            finger_pos = await get_hand_pos(results, mp_hands, frame,
                                       mp.solutions.drawing_utils)
             if finger_pos:
                 pygame.draw.circle(screen, RED, finger_pos, finger_radius)
@@ -100,21 +100,32 @@ def main():
                             grabbed_object = obj
                             break
 
+        # Draw the opencv image onto pygame window 
+        # resize opencv to be 1/8 of the pygame window size, and display on the bottom right
+        frame = cv2.resize(frame, (screen_width // 4, screen_height // 4))
+        frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+        frame = cv2.flip(frame, 1)
+
+        screen.blit(pygame.surfarray.make_surface(frame), (screen_width * 0.75, screen_height * 0.75))
+        
         # ------------------------Adam's drawings replace this-----------------#
         for obj in object_list:
             pygame.draw.circle(screen, (0, 0, 255), (obj.x, obj.y), 30)
         # ----------------------------------------------------------------------#
 
-        # Draw a red circle representing the finger
+
         pygame.display.flip()
-        cv2.imshow('MediaPipe Hands', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
-        cv2.waitKey(1)
-        clock.tick(30)
+
+        # Let other tasks run
+        await asyncio.sleep(0)
+
+        # cv2.imshow('MediaPipe Hands', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+        # cv2.waitKey(1)
+        clock.tick(60)
 
     # Release the webcam and quit Pygame
     cap.release()
     pygame.quit()
 
-
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
