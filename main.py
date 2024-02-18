@@ -6,20 +6,21 @@ from Frontend import *
 import random
 
 zero = Number(15, 30, 999, 0)
-one = Number(78.8, 30, 999, 1)
-two = Number(142.6, 30, 999, 2)
-three = Number(206.4, 30, 999, 3)
-four = Number(270.2, 30, 999, 4)
-five = Number(334.0, 30, 999, 5)
-six = Number(397.0, 30, 999, 6)
-seven = Number(461.6, 30, 999, 7)
-eight = Number(525.4, 30, 999, 8)
-nine = Number(590, 30, 999, 9)
+# one = Number(78.8, 30, 999, 1)
+# two = Number(142.6, 30, 999, 2)
+# three = Number(206.4, 30, 999, 3)
+# four = Number(270.2, 30, 999, 4)
+# five = Number(334.0, 30, 999, 5)
+# six = Number(397.0, 30, 999, 6)
+# seven = Number(461.6, 30, 999, 7)
+# eight = Number(525.4, 30, 999, 8)
+# nine = Number(590, 30, 999, 9)
 
 # PUTTING THE NUMBERS IN A LIST
 
-numbers = [zero, one, two, three, four, five, six, seven, eight, nine]
+# numbers = [zero, one, two, three, four, five, six, seven, eight, nine]
 # numbers = [zero, one]
+numbers = [zero]
 
 # DEFINING THE OPERATIONS (X COORD, Y COORD, DISTANCE, VALUE OF THE OPERATION)
 
@@ -53,6 +54,15 @@ blue_circle = Circle(200, 200, 999)
 
 # SETTING THE EQUALS SIGN
 red_sign = Equals(400, 200, 999)
+
+# SETTING THE SIGN (ADDING OR SUBTRACTING)
+sign_integer = random.randint(0, 1)
+if sign_integer == 0:
+    sign = "+"
+else:   
+    sign = "-"
+
+operation = Operations(220, 200, 999, sign)
 
 # Setting the answer
 answer_integer = random.randint(1, 17)
@@ -97,6 +107,7 @@ def main():
     background = pygame.transform.scale(background_image,
                                         (screen_width, screen_height))
 
+
     GRAB_DISTANCE = 20
 
     # Game variables
@@ -121,6 +132,8 @@ def main():
         display_green_box(green_box_two, screen)
         display_equals(red_sign, screen)
         display_answer(answer, screen)
+        display_operation(operation, screen)
+        display_garbage(garbage, screen)
 
         display_numbers(numbers, screen)
 
@@ -142,17 +155,21 @@ def main():
                     grabbed_object.x, grabbed_object.y = finger_pos[0], \
                         finger_pos[1]
 
+                    # ------------------------DROPPING-----------------#
                     # if finger_pos[0] and finger_pos[1] are within the green box, print "in green box"
                     if (green_box_one.x < finger_pos[0] < green_box_one.x + 100 and green_box_one.y < finger_pos[1] < green_box_one.y + 100):
                         print("in green box one")
                         # set the coordinates of the grabbed object to the coordinates of the green box and set is_grab to False   
                         grabbed_object.x, grabbed_object.y = green_box_one.x, green_box_one.y
                         is_grab = False
-                    if (green_box_two.x < finger_pos[0] < green_box_two.x + 100 and green_box_two.y < finger_pos[1] < green_box_two.y + 100):
+                    elif (green_box_two.x < finger_pos[0] < green_box_two.x + 100 and green_box_two.y < finger_pos[1] < green_box_two.y + 100):
                         print("in green box two")
                         # set the coordinates of the grabbed object to the coordinates of the green box and set is_grab to False  
                         grabbed_object.x, grabbed_object.y = green_box_two.x, green_box_two.y
                         is_grab = False 
+                    elif (garbage.x < finger_pos[0] < garbage.x + 125 and garbage.y < finger_pos[1] < garbage.y + 125):
+                        grabbed_object.x, grabbed_object.y = original_x_values[grabbed_object.value], original_y_value
+                        is_grab = False
 
                 else:
                     for obj in numbers:

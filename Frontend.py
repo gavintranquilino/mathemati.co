@@ -50,6 +50,12 @@ def display_numbers(numbers, screen):
 # garbage_rect = garbage_can.get_rect() # Create a rectangle for pygame
 # scaled_garbage = pygame.transform.scale(garbage_can, (125, 125)) # Scale the garbage image (only present here)
 # screen.blit(scaled_garbage, (garbage.x, garbage.y)) # Display the garbage imaege to the screen
+# display the garbage can as a function
+def display_garbage(garbage, screen):
+    garbage_can = pygame.image.load(garbage.value) # Load the garbage image
+    garbage_rect = garbage_can.get_rect() # Create a rectangle for pygame
+    scaled_garbage = pygame.transform.scale(garbage_can, (125, 125)) # Scale the garbage image (only present here)
+    screen.blit(scaled_garbage, (garbage.x, garbage.y)) # Display the garbage imaege to the screen
 
 # DISPLAYING THE FIRST GREEN BOX
 
@@ -87,8 +93,17 @@ def display_answer(answer, screen):
     answer_display = font.render(str(answer.value), True, (0, 0, 0))
     screen.blit(answer_display, (answer.x, answer.y))
 
+# display the operation as a function
+def display_operation(operation, screen):
+    operation_display = font.render(str(operation.value), True, (0, 0, 0))
+    screen.blit(operation_display, (operation.x, operation.y))
+
 
 # DISPLAYING THE OPERATIONS
     
+def display_operations(operations, screen):
+    for i in range(len(operations)):
+        operations_display = font.render(str(operations[i].value), True, (0, 0, 0))
+        screen.blit(operations_display, (operations[i].x, operations[i].y))
 # for i in range(len(operations)):
 #     display_number(operations[i].value, operations[i].x, operations[i].y)
