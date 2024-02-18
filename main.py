@@ -5,6 +5,20 @@ from Objects import *
 from Frontend import *
 import random
 
+# ------------------------Game STUFF-----------------#
+score = 0
+turn = 1
+left = None
+right = None
+
+# need to initialize a random one first
+sign_integer = random.randint(0, 1)
+if sign_integer == 0:
+    sign = "+"
+else:   
+    sign = "-"
+
+
 zero = Number(15, 30, 999, 0)
 one = Number(78.8, 30, 999, 1)
 two = Number(142.6, 30, 999, 2)
@@ -55,12 +69,7 @@ blue_circle = Circle(200, 200, 999)
 # SETTING THE EQUALS SIGN
 red_sign = Equals(400, 200, 999)
 
-# SETTING THE SIGN (ADDING OR SUBTRACTING)
-sign_integer = random.randint(0, 1)
-if sign_integer == 0:
-    sign = "+"
-else:   
-    sign = "-"
+
 
 operation = Operations(220, 200, 999, sign)
 
@@ -146,6 +155,16 @@ def main():
             results = hands.process(frame)
             finger_pos = get_hand_pos(results, mp_hands, frame,
                                       mp.solutions.drawing_utils)
+            
+
+            # SETTING THE SIGN (ADDING OR SUBTRACTING) RANDOM STUFF-----------------#
+            sign_integer = random.randint(0, 1)
+            if sign_integer == 0:
+                sign = "+"
+            else:   
+                sign = "-"
+
+
             if finger_pos:
                 pygame.draw.circle(screen, RED, finger_pos, finger_radius)
                 # print(finger_pos)
@@ -161,11 +180,13 @@ def main():
                         print("in green box one")
                         # set the coordinates of the grabbed object to the coordinates of the green box and set is_grab to False   
                         grabbed_object.x, grabbed_object.y = green_box_one.x, green_box_one.y
+                        left = grabbed_object.value
                         is_grab = False
                     elif (green_box_two.x < finger_pos[0] < green_box_two.x + 100 and green_box_two.y < finger_pos[1] < green_box_two.y + 100):
                         print("in green box two")
                         # set the coordinates of the grabbed object to the coordinates of the green box and set is_grab to False  
                         grabbed_object.x, grabbed_object.y = green_box_two.x, green_box_two.y
+                        right = grabbed_object.value
                         is_grab = False 
                     elif (garbage.x < finger_pos[0] < garbage.x + 125 and garbage.y < finger_pos[1] < garbage.y + 125):
                         grabbed_object.x, grabbed_object.y = original_x_values[grabbed_object.value], original_y_value
