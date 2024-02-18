@@ -1,7 +1,6 @@
 import cv2
 import mediapipe as mp
 import pygame
-import asyncio
 from Objects import *
 from Frontend import * 
 import random
@@ -20,6 +19,7 @@ nine = Number(590, 30, 999, 9)
 # PUTTING THE NUMBERS IN A LIST
 
 numbers = [zero, one, two, three, four, five, six, seven, eight, nine]
+# numbers = [zero, one]
 
 # DEFINING THE OPERATIONS (X COORD, Y COORD, DISTANCE, VALUE OF THE OPERATION)
 
@@ -67,7 +67,7 @@ red_sign = Equals(400, 200, 999)
 answer_integer = random.randint(1, 17)
 answer = Answer(530, 205, 999, answer_integer)
 
-async def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
+def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
                                                               int, int] | None:
     """
     Returns the coordinates of the hand position
@@ -89,7 +89,7 @@ async def get_hand_pos(results, mp_hands, frame, mp_drawing) -> tuple[
         return (x, y)
 
 
-async def main():
+def main():
     # Initialize MediaPipe Hands
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands()
@@ -142,7 +142,7 @@ async def main():
 
             # Process the frame with MediaPipe Hands.
             results = hands.process(frame)
-            finger_pos = await get_hand_pos(results, mp_hands, frame,
+            finger_pos = get_hand_pos(results, mp_hands, frame,
                                       mp.solutions.drawing_utils)
             if finger_pos:
                 pygame.draw.circle(screen, RED, finger_pos, finger_radius)
@@ -153,14 +153,24 @@ async def main():
                 if is_grab:
                     grabbed_object.x, grabbed_object.y = finger_pos[0], \
                         finger_pos[1]
-                    
-                    # Frontend
+
+                    # if finger_pos[0] and finger_pos[1] are within the green box, print "in green box"
+                    if (green_box_one.x < finger_pos[0] < green_box_one.x + 100 and green_box_one.y < finger_pos[1] < green_box_one.y + 100):
+                        print("in green box one")
+                        # set the coordinates of the grabbed object to the coordinates of the green box and set is_grab to False   
+                        grabbed_object.x, grabbed_object.y = green_box_one.x, green_box_one.y
+                        is_grab = False
+                    if (green_box_two.x < finger_pos[0] < green_box_two.x + 100 and green_box_two.y < finger_pos[1] < green_box_two.y + 100):
+                        print("in green box two")
+                        # set the coordinates of the grabbed object to the coordinates of the green box and set is_grab to False  
+                        grabbed_object.x, grabbed_object.y = green_box_two.x, green_box_two.y
+                        is_grab = False 
 
                 else:
                     for obj in numbers:
                         is_grab = obj.grab(finger_pos[0], finger_pos[1],
                                            GRAB_DISTANCE)
-                        print(is_grab)
+                        # print(is_grab)
                         if is_grab:
                             grabbed_object = obj
                             break
@@ -180,9 +190,6 @@ async def main():
 
         pygame.display.flip()
 
-        # Let other tasks run
-        await asyncio.sleep(0)
-
         # cv2.imshow('MediaPipe Hands', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
         # cv2.waitKey(1)
         clock.tick(60)
@@ -192,4 +199,4 @@ async def main():
     pygame.quit()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
