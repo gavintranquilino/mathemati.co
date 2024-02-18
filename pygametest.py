@@ -25,7 +25,7 @@ def distances(mouse_x, mouse_y, x_positions, y_positions):
     # return the smallest distance and edit those values
     
     # dist list is a list with all of the different distances from each number
-    dist = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    dist = [999, 999, 999, 999, 999, 999, 999, 999, 999, 999]
     
     for i in range(len(x_positions)):
         
@@ -33,17 +33,23 @@ def distances(mouse_x, mouse_y, x_positions, y_positions):
         
         dist[i] = (pygame.math.Vector2(mouse_x - x_positions[i], mouse_y - y_positions[i]).length())
         
-        print(i, dist[i])
+        # print(i, dist[i])
+        
+        for j in range(len(dist) - 1):
+            current_lowest = dist[j]
+            current_lowest_index = j
+        
+        if (current_lowest < dist[j+1]):
+            current_lowest = dist[j+1]
+            current_lowest_index = j+1
+            
+        print(dist)
+        print("current lowerst ", current_lowest)
+        print("current lowest index ", current_lowest_index)
         
     # find the lowest distance of the distances
     
-    for i in range(len(dist) - 1):
-        if dist[i] < dist[i+1]:
-            lowest_index = i
-        else:
-            lowest_index = i+1
-    
-    return lowest_index
+    return current_lowest_index
     
 
 # Initial position of the number
@@ -66,6 +72,7 @@ while True:
 
     # Get the position of the mouse cursor
     mouse_x, mouse_y = pygame.mouse.get_pos()
+    print(mouse_x, mouse_y)
     
     # get the shortest distance away
     change = distances(mouse_x, mouse_y, number_x, number_y)

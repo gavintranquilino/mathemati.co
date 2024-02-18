@@ -1,8 +1,5 @@
-for i in range(10):
-    print(i)
-    
-    
-number_x = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
+list = [584.7700402722425, 534.8420327535972, 484.92886076207094, 435.03563072465687, 385.1700922968968, 999, 999, 999, 999, 999]
 
-for i in range(len(number_x)):
-    print(i)
+min_value = min(list)
+
+print("final ans", min_value)
