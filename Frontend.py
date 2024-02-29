@@ -98,5 +98,3 @@ def display_operations(operations, screen):
         operations_display = font.render(str(operations[i].value), True,
                                          (0, 0, 0))
         screen.blit(operations_display, (operations[i].x, operations[i].y))
-# for i in range(len(operations)):
-#     display_number(operations[i].value, operations[i].x, operations[i].y)

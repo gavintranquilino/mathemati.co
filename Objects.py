@@ -50,6 +50,7 @@ class Operations(Object):
         Object.__init__(self, x, y, distance)
         self.value = value
 
+
 class Answer(Object):
     '''
     this is an answer object with coordinates, distance and some int value
@@ -79,9 +80,10 @@ class GarbageCan(Object):
         self.distance = distance
         self.value = "Garbage.png"
 
+
 class Squares(Object):
     '''
-    this is a squares Object with two coordinates, both passed in by the user, 
+    this is a squares Object with two coordinates, both passed in by the user,
     and a distance that is passed in as a parameter by the user
     '''
 
@@ -92,6 +94,7 @@ class Squares(Object):
     def __init__(self, x: float, y: float, distance: float):
         Object.__init__(self, x, y, distance)
         self.value = "Green Square.png"
+
 
 class Circle(Object):
     '''
