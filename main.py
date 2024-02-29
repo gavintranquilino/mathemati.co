@@ -1,6 +1,5 @@
 import cv2
 import mediapipe as mp
-import pygame
 from Objects import *
 from Frontend import *
 import random
@@ -18,19 +17,19 @@ if sign_integer == 0:
 else:
     sign = "-"
 
-zero = Number(15, 30, 999, 0)
-one = Number(78.8, 30, 999, 1)
-two = Number(142.6, 30, 999, 2)
-three = Number(206.4, 30, 999, 3)
-four = Number(270.2, 30, 999, 4)
-five = Number(334.0, 30, 999, 5)
-six = Number(397.0, 30, 999, 6)
-seven = Number(461.6, 30, 999, 7)
-eight = Number(525.4, 30, 999, 8)
-nine = Number(590, 30, 999, 9)
+zeros = [Number(15, 30, 999, 0) for i in range(3)]
+ones = [Number(78.8, 30, 999, 1) for i in range(3)]
+twos = [Number(142.6, 30, 999, 2) for i in range(3)]
+threes = [Number(206.4, 30, 999, 3) for i in range(3)]
+fours = [Number(270.2, 30, 999, 4) for i in range(3)]
+fives = [Number(334.0, 30, 999, 5) for i in range(3)]
+sixs = [Number(397.0, 30, 999, 6) for i in range(3)]
+sevens = [Number(461.6, 30, 999, 7) for i in range(3)]
+eights = [Number(525.4, 30, 999, 8) for i in range(3)]
+nines = [Number(590, 30, 999, 9) for i in range(3)]
 
 # PUTTING THE NUMBERS IN A LIST
-numbers = [zero, one, two, three, four, five, six, seven, eight, nine]
+numbers = zeros + ones + twos + threes + fours + fives + sixs + sevens + eights + nines
 
 # SAVING THE COORDIANTES SO THEY CAN BE REFERENCED FOR LATER IN A SEPARATE LIST
 # NUMBER OF INDEX = NUMBER REFERRING TO
@@ -160,7 +159,6 @@ def main() -> None:
         display_operation(operation, screen)
         display_garbage(garbage, screen)
         display_numbers(numbers, screen)
-        # print(score)  # show it on screen later
         display_value(score, screen)
 
         ret, frame = cap.read()
@@ -241,20 +239,12 @@ def main() -> None:
 
         # Update the display
         pygame.display.flip()
-        
 
-        # cv2.imshow('MediaPipe Hands', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
-        # cv2.waitKey(1)
         clock.tick(60)
 
     # Release the webcam and quit Pygame
     cap.release()
     pygame.quit()
-
-    '''
-    if over:
-        return
-    '''
 
 
 if __name__ == "__main__":
