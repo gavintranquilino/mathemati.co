@@ -17,26 +17,29 @@ if sign_integer == 0:
 else:
     sign = "-"
 
-zeros, zero_orig = [Number(15, 30, 999, 0) for i in range(3)], \
-    [15 for i in range(3)]
-ones, ones_orig = [Number(78.8, 30, 999, 1) for i in range(3)], \
-    [79 for i in range(3)]
-twos, twos_orig = [Number(142.6, 30, 999, 2) for i in range(3)], \
-    [143 for i in range(3)]
-threes, threes_orig = [Number(206.4, 30, 999, 3) for i in range(3)], \
-    [207 for i in range(3)]
-fours, fours_orig = [Number(270.2, 30, 999, 4) for i in range(3)], \
-    [270 for i in range(3)]
-fives, fives_orig = [Number(334.0, 30, 999, 5) for i in range(3)], \
-    [334 for i in range(3)]
-sixes, sixes_orig = [Number(397.0, 30, 999, 6) for i in range(3)], \
-    [397 for i in range(3)]
-sevens, sev_orig = [Number(461.6, 30, 999, 7) for i in range(3)], \
-    [462 for i in range(3)]
-eights, eight_orig = [Number(525.4, 30, 999, 8) for i in range(3)], \
-    [525 for i in range(3)]
-nines, nines_orig = [Number(590, 30, 999, 9) for i in range(3)], \
-    [590 for i in range(3)]
+n = 3  # number of each number
+
+# SETTING THE NUMBERS
+zeros, zero_orig = [Number(15, 30, 999, 0) for i in range(n)], \
+    [15 for i in range(n)]
+ones, ones_orig = [Number(78.8, 30, 999, 1) for i in range(n)], \
+    [79 for i in range(n)]
+twos, twos_orig = [Number(142.6, 30, 999, 2) for i in range(n)], \
+    [143 for i in range(n)]
+threes, threes_orig = [Number(206.4, 30, 999, 3) for i in range(n)], \
+    [207 for i in range(n)]
+fours, fours_orig = [Number(270.2, 30, 999, 4) for i in range(n)], \
+    [270 for i in range(n)]
+fives, fives_orig = [Number(334.0, 30, 999, 5) for i in range(n)], \
+    [334 for i in range(n)]
+sixes, sixes_orig = [Number(397.0, 30, 999, 6) for i in range(n)], \
+    [397 for i in range(n)]
+sevens, sev_orig = [Number(461.6, 30, 999, 7) for i in range(n)], \
+    [462 for i in range(n)]
+eights, eight_orig = [Number(525.4, 30, 999, 8) for i in range(n)], \
+    [525 for i in range(n)]
+nines, nines_orig = [Number(590, 30, 999, 9) for i in range(n)], \
+    [590 for i in range(n)]
 
 # PUTTING THE NUMBERS IN A LIST
 numbers = zeros + ones + twos + threes + fours + fives + sixes + sevens + eights + nines
@@ -46,6 +49,7 @@ numbers = zeros + ones + twos + threes + fours + fives + sixes + sevens + eights
 original_x_values = zero_orig + ones_orig + twos_orig + threes_orig + \
                     fours_orig + fives_orig + sixes_orig + sev_orig + eight_orig + nines_orig
 assert len(original_x_values) == len(numbers)
+
 original_y_value = 30
 
 # SETTING THE GARBAGE CAN
@@ -213,7 +217,7 @@ def main() -> None:
                         0] < garbage.x + 125 and garbage.y < finger_pos[
                               1] < garbage.y + 125):
                         grabbed_object.x, grabbed_object.y = original_x_values[
-                            grabbed_object.value], original_y_value
+                            3 * grabbed_object.value], original_y_value
                         is_grab = False
 
                 else:
@@ -251,7 +255,7 @@ def main() -> None:
         # Update the display
         pygame.display.flip()
 
-        clock.tick(60)
+        clock.tick(55)
 
     # Release the webcam and quit Pygame
     cap.release()
