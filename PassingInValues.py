@@ -9,14 +9,7 @@ import sys
 
 import random
 
-from Objects import Number
-from Objects import Operations
-from Objects import GarbageCan
-from Objects import Squares
-from Objects import Circle
-from Objects import Equals
-from Objects import Answer
-
+from Objects import Number, Operations, GarbageCan, Squares, Circle, Equals, Answer
 # 2. save them elsewhere
 
 # DEFINING ALL OF THE NUMBERS (X COORD, Y COORD, DISTANCE, VALUE OF THE NUMBER
@@ -155,12 +148,12 @@ while True:
     screen.blit(answer_display, (answer.x, answer.y))
 
 
-    
+
     for i in range(len(numbers)):
         display_number(numbers[i].value, numbers[i].x, numbers[i].y)
 
     # DISPLAYING THE OPERATIONS
-        
+
     for i in range(len(operations)):
         display_number(operations[i].value, operations[i].x, operations[i].y)
 
