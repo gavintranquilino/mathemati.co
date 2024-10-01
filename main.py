@@ -4,7 +4,7 @@ from Objects import *
 from Frontend import *
 import random
 
-# ------------------------Game STUFF-----------------#
+# ------------------------Game STUFF--------------------#
 score = 0
 left = None
 right = None
